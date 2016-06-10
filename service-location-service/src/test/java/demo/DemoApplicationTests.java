@@ -28,21 +28,21 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 public class DemoApplicationTests {
 
-	@ClassRule
-	public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
+    @ClassRule
+    public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
 
-	@ClassRule
-	public static MongoTestSupport mongo = new MongoTestSupport("mongoClient");
+    @ClassRule
+    public static MongoTestSupport mongo = new MongoTestSupport("mongoClient");
 
-	@Rule
-	public SpringMethodRule springMethod = new SpringMethodRule();
+    @Rule
+    public SpringMethodRule springMethod = new SpringMethodRule();
 
-	@Autowired
-	ServiceLocationRepository repository;
+    @Autowired
+    ServiceLocationRepository repository;
 
-	@Test
-	public void contextLoads() {
-		this.repository.count();
-	}
+    @Test
+    public void contextLoads() {
+        this.repository.count();
+    }
 
 }

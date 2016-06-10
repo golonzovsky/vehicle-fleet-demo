@@ -18,36 +18,33 @@ import java.util.List;
 import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- *
  * @author Gunnar Hillert
- *
  */
 @Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-@JsonPropertyOrder({ "numberOfGpsSimulatorRequests", "gpsSimulatorRequests" })
+@JsonPropertyOrder({"numberOfGpsSimulatorRequests", "gpsSimulatorRequests"})
 public class SimulatorFixture {
 
-	private List<GpsSimulatorRequest> gpsSimulatorRequests = new ArrayList<>(0);
+    private List<GpsSimulatorRequest> gpsSimulatorRequests = new ArrayList<>(0);
 
-	public int getNumberOfGpsSimulatorRequests() {
-		return gpsSimulatorRequests.size();
-	}
+    public int getNumberOfGpsSimulatorRequests() {
+        return gpsSimulatorRequests.size();
+    }
 
-	public void setGpsSimulatorRequests(List<GpsSimulatorRequest> gpsSimulatorRequests) {
-		Assert.notEmpty(gpsSimulatorRequests, "gpsSimulatorRequests must not be empty.");
-		this.gpsSimulatorRequests = gpsSimulatorRequests;
-	}
+    public void setGpsSimulatorRequests(List<GpsSimulatorRequest> gpsSimulatorRequests) {
+        Assert.notEmpty(gpsSimulatorRequests, "gpsSimulatorRequests must not be empty.");
+        this.gpsSimulatorRequests = gpsSimulatorRequests;
+    }
 
-	public boolean usesKmlIntegration() {
-		return gpsSimulatorRequests.stream().anyMatch(request -> request.isExportPositionsToKml());
-	}
+    public boolean usesKmlIntegration() {
+        return gpsSimulatorRequests.stream().anyMatch(request -> request.isExportPositionsToKml());
+    }
 
 }

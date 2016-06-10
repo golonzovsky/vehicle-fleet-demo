@@ -46,150 +46,148 @@ import demo.service.KmlService;
  * KML utility functions.
  * Each thread that utilizes this class should instantiate a new instance of it because jaxb marshal/unmarshalling is
  * not thread safe.
+ *
  * @author faram
  * @author Gunnar Hillert
  */
 @Service
 public class DefaultKmlService implements KmlService {
 
-	public static final String KML_POSITION_FILE_NAME = "pos";
-	public static final String KML_POSITION_FILE_SUFFIX = ".xml";
+    public static final String KML_POSITION_FILE_NAME = "pos";
+    public static final String KML_POSITION_FILE_SUFFIX = ".xml";
 
-	@Autowired
-	private Marshaller marshaller;
+    @Autowired
+    private Marshaller marshaller;
 
-	private Map<Long, byte[]> kmlInstances = new ConcurrentHashMap<>();
-	private volatile byte[]   kmlBootstrap = null;
+    private Map<Long, byte[]> kmlInstances = new ConcurrentHashMap<>();
+    private volatile byte[] kmlBootstrap = null;
 
-	@Override
-	public final void setupKmlIntegration(Set<Long> intanceIds, Point lookAtPoint, String kmlUrl) {
-		Assert.notEmpty(intanceIds);
-		Assert.isTrue(intanceIds.size() >= 1);
+    @Override
+    public final void setupKmlIntegration(Set<Long> intanceIds, Point lookAtPoint, String kmlUrl) {
+        Assert.notEmpty(intanceIds);
+        Assert.isTrue(intanceIds.size() >= 1);
 
-		Kml kml = KmlFactory.createKml();
-		Document folder = KmlFactory.createDocument();
-		folder.setOpen(true);
-		folder.setName("Contains GPS Coordinates");
-		kml.setFeature(folder);
+        Kml kml = KmlFactory.createKml();
+        Document folder = KmlFactory.createDocument();
+        folder.setOpen(true);
+        folder.setName("Contains GPS Coordinates");
+        kml.setFeature(folder);
 
-		final LookAt lookAt = KmlFactory.createLookAt();
-		lookAt.setLatitude(lookAtPoint.getLatitude());
-		lookAt.setLongitude(lookAtPoint.getLongitude());
-		lookAt.setAltitude(25000);
-		lookAt.setAltitudeMode(AltitudeMode.ABSOLUTE);;
-		folder.setAbstractView(lookAt);
+        final LookAt lookAt = KmlFactory.createLookAt();
+        lookAt.setLatitude(lookAtPoint.getLatitude());
+        lookAt.setLongitude(lookAtPoint.getLongitude());
+        lookAt.setAltitude(25000);
+        lookAt.setAltitudeMode(AltitudeMode.ABSOLUTE);
+        ;
+        folder.setAbstractView(lookAt);
 
-		for (long instanceId : intanceIds) {
-			Link link = KmlFactory.createLink();
-			link.setHref(kmlUrl + instanceId);
-			link.setRefreshMode(RefreshMode.ON_INTERVAL);
-			link.setRefreshInterval(1d);
+        for (long instanceId : intanceIds) {
+            Link link = KmlFactory.createLink();
+            link.setHref(kmlUrl + instanceId);
+            link.setRefreshMode(RefreshMode.ON_INTERVAL);
+            link.setRefreshInterval(1d);
 
-			NetworkLink networkLink = KmlFactory.createNetworkLink();
-			networkLink.setName("GPS link " + instanceId);
-			networkLink.setOpen(true);
-			networkLink.setLink(link);
-			folder.addToFeature(networkLink);
-		}
+            NetworkLink networkLink = KmlFactory.createNetworkLink();
+            networkLink.setName("GPS link " + instanceId);
+            networkLink.setOpen(true);
+            networkLink.setLink(link);
+            folder.addToFeature(networkLink);
+        }
 
-		final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		try {
-			this.marshaller.marshal(kml, new StreamResult(out));
-		} catch (XmlMappingException | IOException e) {
-			throw new IllegalStateException(e);
-		}
+        try {
+            this.marshaller.marshal(kml, new StreamResult(out));
+        } catch (XmlMappingException | IOException e) {
+            throw new IllegalStateException(e);
+        }
 
-		this.kmlBootstrap = out.toByteArray();
-	}
+        this.kmlBootstrap = out.toByteArray();
+    }
 
-	/* (non-Javadoc)
-	 * @see frk.gpssimulator.service.KmlService#createPosKml(frk.gpssimulator.model.PositionInfo)
-	 */
-	@Override
-	public void updatePosition(Long instanceId, CurrentPosition position) {
-		de.micromata.opengis.kml.v_2_2_0.Point point = KmlFactory.createPoint();
-		Integer speedKph = 0;
+    /* (non-Javadoc)
+     * @see frk.gpssimulator.service.KmlService#createPosKml(frk.gpssimulator.model.PositionInfo)
+     */
+    @Override
+    public void updatePosition(Long instanceId, CurrentPosition position) {
+        de.micromata.opengis.kml.v_2_2_0.Point point = KmlFactory.createPoint();
+        Integer speedKph = 0;
 
-		if(position != null) {
-			Coordinate coordinate = KmlFactory.createCoordinate(position.getLocation().getLongitude(), position.getLocation().getLatitude());
-			point.getCoordinates().add(coordinate);
-		}
-		else {
-			Coordinate coordinate = KmlFactory.createCoordinate(0,0);
-			point.getCoordinates().add(coordinate);
-		}
+        if (position != null) {
+            Coordinate coordinate = KmlFactory.createCoordinate(position.getLocation().getLongitude(), position.getLocation().getLatitude());
+            point.getCoordinates().add(coordinate);
+        } else {
+            Coordinate coordinate = KmlFactory.createCoordinate(0, 0);
+            point.getCoordinates().add(coordinate);
+        }
 
-		final Kml kml = KmlFactory.createKml();
-		final Document document = kml.createAndSetDocument().withOpen(true);
+        final Kml kml = KmlFactory.createKml();
+        final Document document = kml.createAndSetDocument().withOpen(true);
 
-		final IconStyle iconStyleError = document.createAndAddStyle()
-				.withId("errorStyle")
-				.createAndSetIconStyle();
-		iconStyleError.setColor("ff0000ff");
-		iconStyleError.setScale(1.2);
+        final IconStyle iconStyleError = document.createAndAddStyle()
+                .withId("errorStyle")
+                .createAndSetIconStyle();
+        iconStyleError.setColor("ff0000ff");
+        iconStyleError.setScale(1.2);
 
-		final IconStyle iconStyleWarning = document.createAndAddStyle()
-				.withId("warningStyle")
-				.createAndSetIconStyle();
-		iconStyleWarning.setColor("ff0080ff");
-		iconStyleWarning.setScale(1.2);
+        final IconStyle iconStyleWarning = document.createAndAddStyle()
+                .withId("warningStyle")
+                .createAndSetIconStyle();
+        iconStyleWarning.setColor("ff0080ff");
+        iconStyleWarning.setScale(1.2);
 
-		final IconStyle iconStyleNormal = document.createAndAddStyle()
-				.withId("normalStyle")
-				.createAndSetIconStyle();
-		iconStyleNormal.setColor("ff00ff00");
-		iconStyleNormal.setScale(1.2);
+        final IconStyle iconStyleNormal = document.createAndAddStyle()
+                .withId("normalStyle")
+                .createAndSetIconStyle();
+        iconStyleNormal.setColor("ff00ff00");
+        iconStyleNormal.setScale(1.2);
 
-		final Placemark placemark = KmlFactory.createPlacemark();
+        final Placemark placemark = KmlFactory.createPlacemark();
 
-		if(position != null) {
-			Double speed = position.getSpeed();
-			speedKph = (int)(speed * 3600 / 1000);
-		}
-		else {
-			speedKph = 0;
-		}
+        if (position != null) {
+            Double speed = position.getSpeed();
+            speedKph = (int) (speed * 3600 / 1000);
+        } else {
+            speedKph = 0;
+        }
 
-		if (VehicleStatus.NONE.equals(position.getVehicleStatus())) {
-			placemark.setName(speedKph.toString() + " kph");
-			placemark.setStyleUrl("#normalStyle");
-		}
-		else if (VehicleStatus.SERVICE_SOON.equals(position.getVehicleStatus())) {
-			placemark.setName(String.format(speedKph.toString() + " kph (Status: %s)", position.getVehicleStatus()));
-			placemark.setStyleUrl("#warningStyle");
-		}
-		else if (VehicleStatus.SERVICE_NOW.equals(position.getVehicleStatus())) {
-			placemark.setName(String.format(speedKph.toString() + " kph (Status: %s)", position.getVehicleStatus()));
-			placemark.setStyleUrl("#errorStyle");
-		}
-		placemark.setGeometry(point);
-		document.addToFeature(placemark);
+        if (VehicleStatus.NONE.equals(position.getVehicleStatus())) {
+            placemark.setName(speedKph.toString() + " kph");
+            placemark.setStyleUrl("#normalStyle");
+        } else if (VehicleStatus.SERVICE_SOON.equals(position.getVehicleStatus())) {
+            placemark.setName(String.format(speedKph.toString() + " kph (Status: %s)", position.getVehicleStatus()));
+            placemark.setStyleUrl("#warningStyle");
+        } else if (VehicleStatus.SERVICE_NOW.equals(position.getVehicleStatus())) {
+            placemark.setName(String.format(speedKph.toString() + " kph (Status: %s)", position.getVehicleStatus()));
+            placemark.setStyleUrl("#errorStyle");
+        }
+        placemark.setGeometry(point);
+        document.addToFeature(placemark);
 
-		final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		try {
-			this.marshaller.marshal(kml, new StreamResult(out));
-			this.kmlInstances.put(instanceId, out.toByteArray());
-		} catch (XmlMappingException | IOException e) {
-			throw new IllegalStateException(e);
-		}
-	}
+        try {
+            this.marshaller.marshal(kml, new StreamResult(out));
+            this.kmlInstances.put(instanceId, out.toByteArray());
+        } catch (XmlMappingException | IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
-	@Override
-	public byte[] getKmlInstance(Long instanceId) {
-		return this.kmlInstances.get(instanceId);
-	}
+    @Override
+    public byte[] getKmlInstance(Long instanceId) {
+        return this.kmlInstances.get(instanceId);
+    }
 
-	@Override
-	public void clearKmlInstances() {
-		this.kmlInstances.clear();
-		this.kmlBootstrap = null;
-	}
+    @Override
+    public void clearKmlInstances() {
+        this.kmlInstances.clear();
+        this.kmlBootstrap = null;
+    }
 
-	@Override
-	public byte[] getKmlBootstrap() {
-		return this.kmlBootstrap;
-	}
+    @Override
+    public byte[] getKmlBootstrap() {
+        return this.kmlBootstrap;
+    }
 
 }

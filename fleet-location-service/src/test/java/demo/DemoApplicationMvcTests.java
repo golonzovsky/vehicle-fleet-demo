@@ -38,28 +38,28 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 public class DemoApplicationMvcTests {
 
-	@Autowired
-	WebApplicationContext context;
+    @Autowired
+    WebApplicationContext context;
 
-	@Value("${org.springframework.restdocs.outputDir:target/generated-snippets}")
-	private String restdocsOutputDir;
+    @Value("${org.springframework.restdocs.outputDir:target/generated-snippets}")
+    private String restdocsOutputDir;
 
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	@Before
-	public void init() {
-		System.setProperty("org.springframework.restdocs.outputDir",
-				this.restdocsOutputDir);
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
-				.apply(documentationConfiguration()).build();
-	}
+    @Before
+    public void init() {
+        System.setProperty("org.springframework.restdocs.outputDir",
+                this.restdocsOutputDir);
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+                .apply(documentationConfiguration()).build();
+    }
 
-	@Test
-	public void getLocations() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/locations"))
-		.andExpect(MockMvcResultMatchers.content()
-				.string(containsString("_embedded")))
-		.andDo(document("locations"));
-	}
+    @Test
+    public void getLocations() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/locations"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(containsString("_embedded")))
+                .andDo(document("locations"));
+    }
 
 }

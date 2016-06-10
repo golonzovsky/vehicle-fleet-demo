@@ -26,30 +26,32 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import demo.model.Location;
+import demo.model.LocationRepository;
+
 /**
  * @author Dave Syer
- *
  */
 @RestController
 public class FleetBulkUploadController {
 
-	private LocationRepository repository;
+    private LocationRepository repository;
 
-	@Autowired
-	public FleetBulkUploadController(LocationRepository repository) {
-		this.repository = repository;
+    @Autowired
+    public FleetBulkUploadController(LocationRepository repository) {
+        this.repository = repository;
 
-	}
+    }
 
-	@RequestMapping(value="/fleet", method=RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
-	public void upload(@RequestBody List<Location> trucks) throws Exception {
-		this.repository.save(trucks);
-	}
+    @RequestMapping(value = "/fleet", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    public void upload(@RequestBody List<Location> trucks) throws Exception {
+        this.repository.save(trucks);
+    }
 
-	@RequestMapping(value="/purge", method=RequestMethod.POST)
-	public void purge() {
-		this.repository.deleteAll();
-	}
+    @RequestMapping(value = "/purge", method = RequestMethod.POST)
+    public void purge() {
+        this.repository.deleteAll();
+    }
 
 }

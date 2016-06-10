@@ -18,12 +18,10 @@ package demo.service;
 import demo.model.CurrentPosition;
 
 /**
- *
  * @author Gunnar Hillert
- *
  */
 public interface ServiceLocationService {
 
-	void updateServiceLocations(CurrentPosition currentPosition);
+    void updateServiceLocations(CurrentPosition currentPosition);
 
 }

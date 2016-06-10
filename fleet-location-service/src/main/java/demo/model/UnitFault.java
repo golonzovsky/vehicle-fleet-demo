@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package demo;
+package demo.model;
 
 import javax.persistence.Embeddable;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -29,13 +28,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @RequiredArgsConstructor
 public class UnitFault {
 
-	private final String vin;
-	private Long spn;
-	private Long fmi;
+    private final String vin;
+    private Long spn;
+    private Long fmi;
 
-	@SuppressWarnings("unused")
-	private UnitFault() {
-		this.vin = "";
-	}
+    @SuppressWarnings("unused")
+    private UnitFault() {
+        this.vin = "";
+    }
 
 }

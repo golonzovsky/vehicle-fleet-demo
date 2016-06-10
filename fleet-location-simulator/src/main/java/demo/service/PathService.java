@@ -21,34 +21,32 @@ import demo.model.ServiceLocation;
 import demo.model.SimulatorFixture;
 
 /**
- *
  * @author Gunnar Hillert
- *
  */
 public interface PathService {
 
-	/**
-	 *
-	 * @return
-	 */
-	List<DirectionInput> loadDirectionInput();
+    /**
+     * @return
+     */
+    List<DirectionInput> loadDirectionInput();
 
-	SimulatorFixture loadSimulatorFixture();
+    SimulatorFixture loadSimulatorFixture();
 
-	/**
-	 *
-	 * @param directionInput
-	 * @return
-	 */
-	List<Point> getCoordinatesFromGoogle(DirectionInput directionInput);
-	String getCoordinatesFromGoogleAsPolyline(DirectionInput directionInput);
+    /**
+     * @param directionInput
+     * @return
+     */
+    List<Point> getCoordinatesFromGoogle(DirectionInput directionInput);
 
-	/**
-	 * Returns list of points contained in the path kml file.
-	 * @param kmlFile path kml file
-	 * @return
-	 */
-	List<Point> getCoordinatesFromKmlFile(File kmlFile);
+    String getCoordinatesFromGoogleAsPolyline(DirectionInput directionInput);
 
-	List<ServiceLocation> getServiceStations();
+    /**
+     * Returns list of points contained in the path kml file.
+     *
+     * @param kmlFile path kml file
+     * @return
+     */
+    List<Point> getCoordinatesFromKmlFile(File kmlFile);
+
+    List<ServiceLocation> getServiceStations();
 }

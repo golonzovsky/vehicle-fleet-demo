@@ -21,13 +21,14 @@ import demo.task.GpsSimulator;
 
 /**
  * @author Gunnar Hillert
- *
  */
 
 public interface GpsSimulatorFactory {
 
-	GpsSimulator prepareGpsSimulator(GpsSimulatorRequest gpsSimulatorRequest);
-	GpsSimulator prepareGpsSimulator(GpsSimulator gpsSimulator, File kmlFile);
-	GpsSimulator prepareGpsSimulator(GpsSimulator gpsSimulator, List<Point> points);
+    GpsSimulator prepareGpsSimulator(GpsSimulatorRequest gpsSimulatorRequest);
+
+    GpsSimulator prepareGpsSimulator(GpsSimulator gpsSimulator, File kmlFile);
+
+    GpsSimulator prepareGpsSimulator(GpsSimulator gpsSimulator, List<Point> points);
 
 }

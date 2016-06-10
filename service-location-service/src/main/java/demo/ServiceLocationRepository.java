@@ -25,13 +25,12 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
  * @author Dave Syer
- *
  */
 @RepositoryRestResource(collectionResourceRel = "locations")
 public interface ServiceLocationRepository
-extends PagingAndSortingRepository<ServiceLocation, Long> {
+        extends PagingAndSortingRepository<ServiceLocation, Long> {
 
-	@RestResource(rel = "by-location", description = @Description("Find by location, comma separated, e.g. 'lat,long', and distance, e.g. '50km'") )
-	ServiceLocation findFirstByLocationNear(@Param("location") Point location);
+    @RestResource(rel = "by-location", description = @Description("Find by location, comma separated, e.g. 'lat,long', and distance, e.g. '50km'"))
+    ServiceLocation findFirstByLocationNear(@Param("location") Point location);
 
 }

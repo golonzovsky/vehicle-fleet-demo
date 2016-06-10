@@ -30,56 +30,55 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
 import demo.model.DirectionInput;
 import demo.model.Point;
 import demo.service.PathService;
 
 /**
  * @author Gunnar Hillert
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @Configuration
 @SpringApplicationConfiguration(classes = {GpsSimulatorApplication.class})
 public class DirectionTests {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DirectionTests.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DirectionTests.class);
 
-	@Autowired
-	private PathService pathService;
+    @Autowired
+    private PathService pathService;
 
-	@Test
-	public void testGetCoordinates() throws NumberFormatException, JAXBException, JsonParseException, JsonMappingException, IOException {
+    @Test
+    public void testGetCoordinates() throws NumberFormatException, JAXBException, JsonParseException, JsonMappingException, IOException {
 
-		final List<DirectionInput> objs = pathService.loadDirectionInput();
-		Assert.assertTrue(objs.size() == 8);
+        final List<DirectionInput> objs = pathService.loadDirectionInput();
+        Assert.assertTrue(objs.size() == 8);
 
-	}
+    }
 
-	/**
-	 * Test method for {@link demo.service.impl.DefaultKmlService#getCoordinates(java.io.File)}.
-	 * @throws JAXBException
-	 * @throws NumberFormatException
-	 */
-	@Test
-	public void testGetCoordinatesFromKmlFile() throws NumberFormatException, JAXBException {
+    /**
+     * Test method for {@link demo.service.impl.DefaultKmlService#getCoordinates(java.io.File)}.
+     *
+     * @throws JAXBException
+     * @throws NumberFormatException
+     */
+    @Test
+    public void testGetCoordinatesFromKmlFile() throws NumberFormatException, JAXBException {
 
-		File file = new File("src/test/resources/test-route-1.kml");
+        File file = new File("src/test/resources/test-route-1.kml");
 
-		Assert.assertTrue(file.exists());
-		Assert.assertTrue(file.isFile());
+        Assert.assertTrue(file.exists());
+        Assert.assertTrue(file.isFile());
 
-		List<Point> points = pathService.getCoordinatesFromKmlFile(file);
+        List<Point> points = pathService.getCoordinatesFromKmlFile(file);
 
-		Assert.assertTrue(points.size() > 0);
+        Assert.assertTrue(points.size() > 0);
 
-		for (Point point : points) {
-			LOGGER.info(String.format("Lat/Lang: %s,%s",
-					point.getLatitude(), point.getLongitude()));
-		}
+        for (Point point : points) {
+            LOGGER.info(String.format("Lat/Lang: %s,%s",
+                    point.getLatitude(), point.getLongitude()));
+        }
 
-		Assert.assertEquals(Integer.valueOf(167), Integer.valueOf(points.size()));
-	}
+        Assert.assertEquals(Integer.valueOf(167), Integer.valueOf(points.size()));
+    }
 
 }

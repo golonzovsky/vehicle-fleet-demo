@@ -24,31 +24,31 @@ import stub.service.StubServiceLocationServiceApplicationTests.ForwardAwareMockM
 @WebAppConfiguration
 public class StubServiceLocationServiceFinderTests {
 
-	@Autowired
-	WebApplicationContext context;
+    @Autowired
+    WebApplicationContext context;
 
-	@Value("${org.springframework.restdocs.outputDir:target/generated-snippets}")
-	private String restdocsOutputDir;
+    @Value("${org.springframework.restdocs.outputDir:target/generated-snippets}")
+    private String restdocsOutputDir;
 
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	@Before
-	public void init() {
-		System.setProperty("org.springframework.restdocs.outputDir",
-				this.restdocsOutputDir);
-		this.mockMvc = ForwardAwareMockMvcBuilders.webAppContextSetup(this.context)
-				.apply(documentationConfiguration()).build();
-	}
+    @Before
+    public void init() {
+        System.setProperty("org.springframework.restdocs.outputDir",
+                this.restdocsOutputDir);
+        this.mockMvc = ForwardAwareMockMvcBuilders.webAppContextSetup(this.context)
+                .apply(documentationConfiguration()).build();
+    }
 
-	@Test
-	public void getLocations() throws Exception {
-		this.mockMvc
-		.perform(MockMvcRequestBuilders.get(
-				"/serviceLocations/search/findFirstByLocationNear?location={lat},{long}",
-				39, -77))
-		.andExpect(
-				MockMvcResultMatchers.content().string(containsString("_links")))
-		.andDo(document("findByLocation"));
-	}
+    @Test
+    public void getLocations() throws Exception {
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get(
+                        "/serviceLocations/search/findFirstByLocationNear?location={lat},{long}",
+                        39, -77))
+                .andExpect(
+                        MockMvcResultMatchers.content().string(containsString("_links")))
+                .andDo(document("findByLocation"));
+    }
 
 }

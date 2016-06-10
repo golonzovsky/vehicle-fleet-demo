@@ -25,9 +25,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Leg {
-	private Integer id;
-	private Point startPosition;
-	private Point endPosition;
-	private Double length;
-	private Double heading;
+    private Integer id;
+    private Point startPosition;
+    private Point endPosition;
+    private Double length;
+    private Double heading;
 }

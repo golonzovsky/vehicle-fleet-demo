@@ -14,25 +14,23 @@ package demo.support;
 
 import javax.xml.bind.JAXBException;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.junit.Assert;
-
 /**
  * @author Gunnar Hillert
- *
  */
 public class FaultCodeUtilsTests {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(FaultCodeUtilsTests.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FaultCodeUtilsTests.class);
 
-	@Test
-	public void testTotalDistance() throws NumberFormatException, JAXBException {
+    @Test
+    public void testTotalDistance() throws NumberFormatException, JAXBException {
 
-		Assert.assertNotNull(FaultCodeUtils.getRandomFaultCode());
+        Assert.assertNotNull(FaultCodeUtils.getRandomFaultCode());
 
-	}
+    }
 
 }

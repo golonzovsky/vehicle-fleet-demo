@@ -20,34 +20,32 @@ import org.springframework.boot.actuate.endpoint.Endpoint;
 import org.springframework.boot.actuate.endpoint.mvc.MvcEndpoint;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Dave Syer
- *
  */
 @Component
 public class DocsAutoConfiguration implements MvcEndpoint {
 
-	@Override
-	public String getPath() {
-		return "/docs/service";
-	}
+    @Override
+    public String getPath() {
+        return "/docs/service";
+    }
 
-	@Override
-	public boolean isSensitive() {
-		return false;
-	}
+    @Override
+    public boolean isSensitive() {
+        return false;
+    }
 
-	@Override
-	public Class<? extends Endpoint> getEndpointType() {
-		return Endpoint.class;
-	}
-	
-	@RequestMapping
-	public String docs() {
-		return "forward:/api-docs/index.html";
-	}
-	
+    @Override
+    public Class<? extends Endpoint> getEndpointType() {
+        return Endpoint.class;
+    }
+
+    @RequestMapping
+    public String docs() {
+        return "forward:/api-docs/index.html";
+    }
+
 
 }

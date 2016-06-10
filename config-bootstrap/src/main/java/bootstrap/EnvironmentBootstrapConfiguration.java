@@ -31,42 +31,41 @@ import lombok.extern.apachecommons.CommonsLog;
 
 /**
  * @author Dave Syer
- *
  */
 @Order(Ordered.LOWEST_PRECEDENCE)
 @CommonsLog
 public class EnvironmentBootstrapConfiguration implements EnvironmentPostProcessor {
 
-	private static final String CONFIG_SERVER_BOOTSTRAP = "configServerBootstrap";
+    private static final String CONFIG_SERVER_BOOTSTRAP = "configServerBootstrap";
 
-	@Override
-	public void postProcessEnvironment(ConfigurableEnvironment environment,
-			SpringApplication application) {
-		if (!environment.getPropertySources().contains(CONFIG_SERVER_BOOTSTRAP)) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("spring.cloud.config.uri",
-					"${CONFIG_SERVER_URI:${vcap.services.${PREFIX:}configserver.credentials.uri:http://localhost:8888}}");
-			if (ClassUtils.isPresent("org.springframework.cloud.sleuth.zipkin.ZipkinProperties", null)) {
-				map.put("spring.zipkin.host",
-						"${ZIPKIN_HOST:${vcap.services.${PREFIX:}zipkin.credentials.host:localhost}}");
-				map.put("logging.pattern.console",
-						"%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([trace=%X{X-Trace-Id:-},span=%X{X-Span-Id:-}]){yellow} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wex");
-				String zipkinHost = environment.resolvePlaceholders("${ZIPKIN_HOST:${vcap.services.${PREFIX:}zipkin.credentials.host:}}");
-				if (!"".equals(zipkinHost)) {
-					map.put("fleet.zipkin.enabled", "true");
-				}
-			}
-			String space = environment.resolvePlaceholders("${vcap.application.space_name:dev}");
-			log.info("Spacename: " + space);
-			if (space.startsWith("dev")) {
-				environment.addActiveProfile("dev");
-			}
-			map.put("encrypt.failOnError", "false");
-			map.put("endpoints.shutdown.enabled", "true");
-			map.put("endpoints.restart.enabled", "true");
-			environment.getPropertySources()
-					.addLast(new MapPropertySource(CONFIG_SERVER_BOOTSTRAP, map));
-		}
-	}
+    @Override
+    public void postProcessEnvironment(ConfigurableEnvironment environment,
+                                       SpringApplication application) {
+        if (!environment.getPropertySources().contains(CONFIG_SERVER_BOOTSTRAP)) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("spring.cloud.config.uri",
+                    "${CONFIG_SERVER_URI:${vcap.services.${PREFIX:}configserver.credentials.uri:http://localhost:8888}}");
+            if (ClassUtils.isPresent("org.springframework.cloud.sleuth.zipkin.ZipkinProperties", null)) {
+                map.put("spring.zipkin.host",
+                        "${ZIPKIN_HOST:${vcap.services.${PREFIX:}zipkin.credentials.host:localhost}}");
+                map.put("logging.pattern.console",
+                        "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([trace=%X{X-Trace-Id:-},span=%X{X-Span-Id:-}]){yellow} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wex");
+                String zipkinHost = environment.resolvePlaceholders("${ZIPKIN_HOST:${vcap.services.${PREFIX:}zipkin.credentials.host:}}");
+                if (!"".equals(zipkinHost)) {
+                    map.put("fleet.zipkin.enabled", "true");
+                }
+            }
+            String space = environment.resolvePlaceholders("${vcap.application.space_name:dev}");
+            log.info("Spacename: " + space);
+            if (space.startsWith("dev")) {
+                environment.addActiveProfile("dev");
+            }
+            map.put("encrypt.failOnError", "false");
+            map.put("endpoints.shutdown.enabled", "true");
+            map.put("endpoints.restart.enabled", "true");
+            environment.getPropertySources()
+                    .addLast(new MapPropertySource(CONFIG_SERVER_BOOTSTRAP, map));
+        }
+    }
 
 }

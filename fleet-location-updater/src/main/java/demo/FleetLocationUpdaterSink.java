@@ -23,7 +23,6 @@ import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import demo.model.CurrentPosition;
 import demo.service.ServiceLocationService;
 
@@ -32,29 +31,28 @@ import demo.service.ServiceLocationService;
  * connected Websocket clients.
  *
  * @author Gunnar Hillert
- *
  */
 @MessageEndpoint
 @EnableBinding(Sink.class)
 public class FleetLocationUpdaterSink {
 
-	@Autowired
-	private SimpMessagingTemplate template;
+    @Autowired
+    private SimpMessagingTemplate template;
 
-	@Autowired
-	private ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-	@Autowired
-	private ServiceLocationService serviceLocationService;
+    @Autowired
+    private ServiceLocationService serviceLocationService;
 
-	@ServiceActivator(inputChannel = Sink.INPUT)
-	public void updateLocationaddServiceLocations(String input) throws Exception {
+    @ServiceActivator(inputChannel = Sink.INPUT)
+    public void updateLocationaddServiceLocations(String input) throws Exception {
 
-		CurrentPosition payload = this.objectMapper.readValue(input, CurrentPosition.class);
+        CurrentPosition payload = this.objectMapper.readValue(input, CurrentPosition.class);
 
-		serviceLocationService.updateServiceLocations(payload);
+        serviceLocationService.updateServiceLocations(payload);
 
-		this.template.convertAndSend("/topic/vehicles", payload);
-	}
+        this.template.convertAndSend("/topic/vehicles", payload);
+    }
 
 }

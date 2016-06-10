@@ -18,17 +18,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- *
  * @author Gunnar Hillert
- *
  */
 @Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class DirectionInput {
 
-	private String from;
-	private String to;
+    private String from;
+    private String to;
 
 }
 

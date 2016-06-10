@@ -31,40 +31,40 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ServiceLocationTests {
 
-	@Test
-	public void testServiceLocationDeserialization() throws JsonParseException, JsonMappingException, IOException {
-		final InputStream is = ServiceLocationTests.class.getResourceAsStream("/service-location.json");
-		final ObjectMapper objectMapper = new ObjectMapper();
-		final ServiceLocation serviceLocation = objectMapper.readValue(is, ServiceLocation.class);
-		Assert.assertNotNull(serviceLocation);
-		Assert.assertEquals(Double.valueOf(38.907773), serviceLocation.getLocation().getLatitude());
-		Assert.assertEquals(Double.valueOf(-77.023735), serviceLocation.getLocation().getLongitude());
+    @Test
+    public void testServiceLocationDeserialization() throws IOException {
+        final InputStream is = ServiceLocationTests.class.getResourceAsStream("/service-location.json");
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final ServiceLocation serviceLocation = objectMapper.readValue(is, ServiceLocation.class);
+        Assert.assertNotNull(serviceLocation);
+        Assert.assertEquals(Double.valueOf(38.907773), serviceLocation.getLocation().getLatitude());
+        Assert.assertEquals(Double.valueOf(-77.023735), serviceLocation.getLocation().getLongitude());
 
-		Assert.assertEquals("55e521c430044aedf761fa52", serviceLocation.getId());
-		Assert.assertEquals("1317 9th St NW", serviceLocation.getAddress1());
-		Assert.assertEquals("Washington", serviceLocation.getCity());
-		Assert.assertEquals("DC", serviceLocation.getState());
-		Assert.assertEquals("20001", serviceLocation.getZip());
-		Assert.assertEquals("Service", serviceLocation.getType());
-	}
+        Assert.assertEquals("55e521c430044aedf761fa52", serviceLocation.getId());
+        Assert.assertEquals("1317 9th St NW", serviceLocation.getAddress1());
+        Assert.assertEquals("Washington", serviceLocation.getCity());
+        Assert.assertEquals("DC", serviceLocation.getState());
+        Assert.assertEquals("20001", serviceLocation.getZip());
+        Assert.assertEquals("Service", serviceLocation.getType());
+    }
 
-	@Test
-	public void testServiceLocationSerialization() throws JsonParseException, JsonMappingException, IOException {
-		final ServiceLocation serviceLocation = new ServiceLocation(Double.valueOf(38.907773), Double.valueOf(-77.023735));
-		serviceLocation.setId("55e521c430044aedf761fa52");
-		serviceLocation.setAddress1("1317 9th St NW");
-		serviceLocation.setCity("Washington");
-		serviceLocation.setState("DC");
-		serviceLocation.setZip("20001");
-		serviceLocation.setType("Service");
+    @Test
+    public void testServiceLocationSerialization() throws IOException {
+        final ServiceLocation serviceLocation = new ServiceLocation(Double.valueOf(38.907773), Double.valueOf(-77.023735));
+        serviceLocation.setId("55e521c430044aedf761fa52");
+        serviceLocation.setAddress1("1317 9th St NW");
+        serviceLocation.setCity("Washington");
+        serviceLocation.setState("DC");
+        serviceLocation.setZip("20001");
+        serviceLocation.setType("Service");
 
-		final InputStream is = ServiceLocationTests.class.getResourceAsStream("/service-location.json");
-		final String serviceLocationAsString = IOUtils.toString(is);
+        final InputStream is = ServiceLocationTests.class.getResourceAsStream("/service-location.json");
+        final String serviceLocationAsString = IOUtils.toString(is);
 
 
-		final ObjectMapper objectMapper = new ObjectMapper();
-		final String json = objectMapper.writeValueAsString(serviceLocation);
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final String json = objectMapper.writeValueAsString(serviceLocation);
 
-		Assert.assertEquals(serviceLocationAsString, json);
-	}
+        Assert.assertEquals(serviceLocationAsString, json);
+    }
 }

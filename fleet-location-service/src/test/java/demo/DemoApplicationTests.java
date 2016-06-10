@@ -25,33 +25,38 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import demo.model.Location;
+import demo.model.LocationRepository;
+import demo.model.UnitFault;
+import demo.model.UnitInfo;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = FleetLocationServiceApplication.class)
 @WebAppConfiguration
 public class DemoApplicationTests {
 
-	@Autowired
-	LocationRepository repository;
+    @Autowired
+    LocationRepository repository;
 
-	@Test
-	public void saveLocation() {
-		this.repository.save(new Location(new UnitInfo("VIN0")));
-	}
+    @Test
+    public void saveLocation() {
+        this.repository.save(new Location(new UnitInfo("VIN0")));
+    }
 
-	@Test
-	public void addFault() {
-		Location location = new Location(new UnitInfo("VIN1"));
-		location.setUnitFault(new UnitFault(location.getVin()));
-		this.repository.save(location);
-	}
+    @Test
+    public void addFault() {
+        Location location = new Location(new UnitInfo("VIN1"));
+        location.setUnitFault(new UnitFault(location.getVin()));
+        this.repository.save(location);
+    }
 
-	@Test
-	public void queryByServiceType() {
-		Location location = new Location(new UnitInfo("VIN1"));
-		location.setServiceType("foo");
-		this.repository.save(location);
-		assertTrue(this.repository.findByServiceType("foo", new PageRequest(0, 20))
-				.getSize() > 0);
-	}
+    @Test
+    public void queryByServiceType() {
+        Location location = new Location(new UnitInfo("VIN1"));
+        location.setServiceType("foo");
+        this.repository.save(location);
+        assertTrue(this.repository.findByServiceType("foo", new PageRequest(0, 20))
+                .getSize() > 0);
+    }
 
 }

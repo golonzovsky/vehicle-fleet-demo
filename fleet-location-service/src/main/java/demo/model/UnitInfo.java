@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package demo;
+package demo.model;
 
 import javax.persistence.Embeddable;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -31,14 +30,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @RequiredArgsConstructor
 public class UnitInfo {
 
-	private final String unitVin;
-	private String engineMake;
-	private String customerName;
-	private String unitNumber;
+    private final String unitVin;
+    private String engineMake;
+    private String customerName;
+    private String unitNumber;
 
-	@SuppressWarnings("unused")
-	private UnitInfo() {
-		this.unitVin = "";
-	}
+    @SuppressWarnings("unused")
+    private UnitInfo() {
+        this.unitVin = "";
+    }
 
 }

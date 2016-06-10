@@ -1,6 +1,5 @@
 package hystrixdashboard.test;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -11,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 /**
  * @author Spencer Gibb
  */
@@ -20,27 +21,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SampleHystrixApp {
 
-	@Autowired
-	Service service;
+    @Autowired
+    Service service;
 
-	@RequestMapping("/")
-	public String slash() {
-		return service.hello();
-	}
+    @RequestMapping("/")
+    public String slash() {
+        return service.hello();
+    }
 
-	@Bean
-	Service service() {
-		return new Service();
-	}
+    @Bean
+    Service service() {
+        return new Service();
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(SampleHystrixApp.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SampleHystrixApp.class, args);
+    }
 }
+
 class Service {
 
-	@HystrixCommand
-	public String hello() {
-		return "Hello";
-	}
+    @HystrixCommand
+    public String hello() {
+        return "Hello";
+    }
 }

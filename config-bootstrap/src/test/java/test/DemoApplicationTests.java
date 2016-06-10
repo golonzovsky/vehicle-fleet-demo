@@ -34,17 +34,17 @@ import test.DemoApplicationTests.DemoApplication;
 @WebAppConfiguration
 public class DemoApplicationTests {
 
-	@Value("${spring.cloud.config.uri:}")
-	private String configServerUrl = "http://configserver";
+    @Value("${spring.cloud.config.uri:}")
+    private String configServerUrl = "http://configserver";
 
-	@Test
-	public void saveLocation() {
-		assertEquals("http://testserver", this.configServerUrl);
-	}
+    @Test
+    public void saveLocation() {
+        assertEquals("http://testserver", this.configServerUrl);
+    }
 
-	@SpringBootApplication
-	protected static class DemoApplication {
+    @SpringBootApplication
+    protected static class DemoApplication {
 
-	}
+    }
 
 }

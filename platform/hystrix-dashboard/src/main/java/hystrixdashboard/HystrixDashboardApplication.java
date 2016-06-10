@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @EnableHystrixDashboard
 public class HystrixDashboardApplication {
 
-	@RequestMapping("/")
-	public String home() {
-		return "forward:/hystrix";
-	}
+    @RequestMapping("/")
+    public String home() {
+        return "forward:/hystrix";
+    }
 
-	public static void main(String[] args) {
-		new SpringApplicationBuilder(HystrixDashboardApplication.class).run(args);
-	}
+    public static void main(String[] args) {
+        new SpringApplicationBuilder(HystrixDashboardApplication.class).run(args);
+    }
 
 }

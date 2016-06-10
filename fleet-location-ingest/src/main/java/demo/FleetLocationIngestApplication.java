@@ -23,14 +23,13 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * Main entry point for the simulator application.
  *
  * @author Gunnar Hillert
- *
  */
 @SpringBootApplication
 @EnableDiscoveryClient
 public class FleetLocationIngestApplication {
 
-	public static void main(String[] args) throws Exception {
-		SpringApplication.run(FleetLocationIngestApplication.class);
-	}
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(FleetLocationIngestApplication.class);
+    }
 
 }

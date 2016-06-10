@@ -33,50 +33,48 @@ import org.springframework.context.annotation.Configuration;
 
 import com.github.kristofa.brave.LoggingSpanCollector;
 import com.github.kristofa.brave.SpanCollector;
-
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * @author Dave Syer
- *
  */
 @Configuration
-@ConditionalOnClass({ Trace.class, ZipkinSpanListener.class })
-@AutoConfigureBefore({ TraceAutoConfiguration.class, ZipkinAutoConfiguration.class })
+@ConditionalOnClass({Trace.class, ZipkinSpanListener.class})
+@AutoConfigureBefore({TraceAutoConfiguration.class, ZipkinAutoConfiguration.class})
 @ConfigurationProperties("fleet.zipkin")
 public class DefaultSamplerAutoConfiguration {
 
-	SecureRandom random = new SecureRandom();
+    SecureRandom random = new SecureRandom();
 
-	@Getter
-	@Setter
-	double sampleRate = 0.1;
+    @Getter
+    @Setter
+    double sampleRate = 0.1;
 
-	@Getter
-	@Setter
-	private boolean enabled;
+    @Getter
+    @Setter
+    private boolean enabled;
 
-	@Bean
-	@ConditionalOnMissingBean(Sampler.class)
-	public Sampler<?> defaultSampler() {
-		return (Object context) -> {
-			return this.random.nextFloat() < this.sampleRate;
-		};
-	}
+    @Bean
+    @ConditionalOnMissingBean(Sampler.class)
+    public Sampler<?> defaultSampler() {
+        return (Object context) -> {
+            return this.random.nextFloat() < this.sampleRate;
+        };
+    }
 
-	@Configuration
-	@ConditionalOnClass(ZipkinSpanListener.class)
-	protected static class ZipkinCollectorAutoConfiguration {
+    @Configuration
+    @ConditionalOnClass(ZipkinSpanListener.class)
+    protected static class ZipkinCollectorAutoConfiguration {
 
-		// Use this for debugging (or if there is no Zipkin collector running on port
-		// 9410)
-		@Bean
-		@ConditionalOnProperty(value = "fleet.zipkin.enabled", havingValue = "false", matchIfMissing = true)
-		public SpanCollector spanCollector() {
-			return new LoggingSpanCollector();
-		}
+        // Use this for debugging (or if there is no Zipkin collector running on port
+        // 9410)
+        @Bean
+        @ConditionalOnProperty(value = "fleet.zipkin.enabled", havingValue = "false", matchIfMissing = true)
+        public SpanCollector spanCollector() {
+            return new LoggingSpanCollector();
+        }
 
-	}
+    }
 
 }

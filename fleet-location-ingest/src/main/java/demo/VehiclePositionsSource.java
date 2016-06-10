@@ -31,18 +31,17 @@ import org.springframework.web.bind.annotation.RestController;
  * data.
  *
  * @author Gunnar Hillert
- *
  */
 @EnableBinding(Source.class)
 @RestController
 public class VehiclePositionsSource {
 
-	@Autowired
-	private MessageChannel output;
+    @Autowired
+    private MessageChannel output;
 
-	@RequestMapping(path="/api/locations", method=RequestMethod.POST)
-	public void locations(@RequestBody String positionInfo) {
-		this.output.send(MessageBuilder.withPayload(positionInfo).build());
-	}
+    @RequestMapping(path = "/api/locations", method = RequestMethod.POST)
+    public void locations(@RequestBody String positionInfo) {
+        this.output.send(MessageBuilder.withPayload(positionInfo).build());
+    }
 
 }

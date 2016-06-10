@@ -39,10 +39,11 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import demo.model.Location;
+import demo.model.LocationRepository;
 
 /**
  * @author Dave Syer
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = FleetLocationServiceApplication.class)
@@ -50,51 +51,51 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @TestPropertySource(properties = "spring.jpa.showSql=true")
 public class FleetLocationTests {
 
-	@Autowired
-	ObjectMapper mapper;
+    @Autowired
+    ObjectMapper mapper;
 
-	@Autowired
-	LocationRepository repository;
+    @Autowired
+    LocationRepository repository;
 
-	@Before
-	public void setup() throws Exception {
-		saveJson();
-	}
+    @Before
+    public void setup() throws Exception {
+        saveJson();
+    }
 
-	@Test
-	public void findAll() throws Exception {
-		Iterable<Location> vehicles = this.repository.findAll();
-		assertEquals(4, getList(vehicles).size());
-	}
+    @Test
+    public void findAll() throws Exception {
+        Iterable<Location> vehicles = this.repository.findAll();
+        assertEquals(4, getList(vehicles).size());
+    }
 
-	@Test
-	public void findByVin() throws Exception {
-		Page<Location> vehicles = this.repository.findByUnitInfoUnitVin(
-				"1FUJGBDV20LBZ2345", new PageRequest(0, 20));
-		assertEquals(1, getList(vehicles).size());
-	}
+    @Test
+    public void findByVin() throws Exception {
+        Page<Location> vehicles = this.repository.findByUnitInfoUnitVin(
+                "1FUJGBDV20LBZ2345", new PageRequest(0, 20));
+        assertEquals(1, getList(vehicles).size());
+    }
 
-	private void saveJson() throws IOException, JsonParseException, JsonMappingException {
-		saveJson(new ClassPathResource("fleet.json"));
-	}
+    private void saveJson() throws IOException, JsonParseException, JsonMappingException {
+        saveJson(new ClassPathResource("fleet.json"));
+    }
 
-	private void saveJson(Resource resource) throws IOException, JsonParseException,
-	JsonMappingException {
-		if (this.repository.count() == 0) {
-			List<Location> value = this.mapper.readValue(resource.getInputStream(),
-					new TypeReference<List<Location>>() {
-			});
-			assertEquals(4, value.size());
-			this.repository.save(value);
-		}
-	}
+    private void saveJson(Resource resource) throws IOException, JsonParseException,
+            JsonMappingException {
+        if (this.repository.count() == 0) {
+            List<Location> value = this.mapper.readValue(resource.getInputStream(),
+                    new TypeReference<List<Location>>() {
+                    });
+            assertEquals(4, value.size());
+            this.repository.save(value);
+        }
+    }
 
-	private List<Location> getList(Iterable<Location> vehicles) {
-		ArrayList<Location> list = new ArrayList<Location>();
-		for (Location location : vehicles) {
-			list.add(location);
-		}
-		return list;
-	}
+    private List<Location> getList(Iterable<Location> vehicles) {
+        ArrayList<Location> list = new ArrayList<Location>();
+        for (Location location : vehicles) {
+            list.add(location);
+        }
+        return list;
+    }
 
 }

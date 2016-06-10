@@ -13,10 +13,8 @@
 package demo.model;
 
 /**
- *
  * @author Gunnar Hillert
- *
  */
 public enum VehicleStatus {
-	NONE, SERVICE_INFO, SERVICE_SOON, SERVICE_NOW, STOP_NOW
+    NONE, SERVICE_INFO, SERVICE_SOON, SERVICE_NOW, STOP_NOW
 }

@@ -47,56 +47,56 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @IntegrationTest("server.port=0")
 public class RestServiceIntegrationTests {
 
-	@Value("${local.server.port}")
-	int port;
+    @Value("${local.server.port}")
+    int port;
 
-	@ClassRule
-	public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
+    @ClassRule
+    public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
 
-	@ClassRule
-	public static MongoTestSupport mongo = new MongoTestSupport("mongoClient");
+    @ClassRule
+    public static MongoTestSupport mongo = new MongoTestSupport("mongoClient");
 
-	@Rule
-	public SpringMethodRule springMethod = new SpringMethodRule();
+    @Rule
+    public SpringMethodRule springMethod = new SpringMethodRule();
 
-	@Autowired
-	ServiceLocationRepository repository;
+    @Autowired
+    ServiceLocationRepository repository;
 
-	@Autowired
-	ObjectMapper objectMapper;
+    @Autowired
+    ObjectMapper objectMapper;
 
-	@Before
-	public void init() throws Exception {
-		if (this.repository.count() == 0) {
-			List<ServiceLocation> values = this.objectMapper.readValue(
-					new ClassPathResource("locations.json").getInputStream(),
-					new TypeReference<List<ServiceLocation>>() {
-					});
-			this.repository.save(values);
-		}
-	}
+    @Before
+    public void init() throws Exception {
+        if (this.repository.count() == 0) {
+            List<ServiceLocation> values = this.objectMapper.readValue(
+                    new ClassPathResource("locations.json").getInputStream(),
+                    new TypeReference<List<ServiceLocation>>() {
+                    });
+            this.repository.save(values);
+        }
+    }
 
-	@Test
-	public void findAll() {
-		TestRestTemplate template = new TestRestTemplate();
-		ResponseEntity<Resource<List<ServiceLocation>>> result = template.exchange(
-				"http://localhost:" + this.port + "/serviceLocations", HttpMethod.GET,
-				new HttpEntity<Void>((Void) null),
-				new ParameterizedTypeReference<Resource<List<ServiceLocation>>>() {
-				});
-		assertEquals(HttpStatus.OK, result.getStatusCode());
-	}
+    @Test
+    public void findAll() {
+        TestRestTemplate template = new TestRestTemplate();
+        ResponseEntity<Resource<List<ServiceLocation>>> result = template.exchange(
+                "http://localhost:" + this.port + "/serviceLocations", HttpMethod.GET,
+                new HttpEntity<Void>((Void) null),
+                new ParameterizedTypeReference<Resource<List<ServiceLocation>>>() {
+                });
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
 
-	@Test
-	public void findByLocation() {
-		TestRestTemplate template = new TestRestTemplate();
-		ResponseEntity<Resource<ServiceLocation>> result = template.exchange(
-				"http://localhost:" + this.port
-				+ "/serviceLocations/search/findFirstByLocationNear?location={lat},{long}",
-				HttpMethod.GET, new HttpEntity<Void>((Void) null),
-				new ParameterizedTypeReference<Resource<ServiceLocation>>() {
-				}, 39, -84);
-		assertEquals(HttpStatus.OK, result.getStatusCode());
-	}
+    @Test
+    public void findByLocation() {
+        TestRestTemplate template = new TestRestTemplate();
+        ResponseEntity<Resource<ServiceLocation>> result = template.exchange(
+                "http://localhost:" + this.port
+                        + "/serviceLocations/search/findFirstByLocationNear?location={lat},{long}",
+                HttpMethod.GET, new HttpEntity<Void>((Void) null),
+                new ParameterizedTypeReference<Resource<ServiceLocation>>() {
+                }, 39, -84);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
 
 }

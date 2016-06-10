@@ -20,22 +20,22 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 @IntegrationTest("server.port=0")
 public class ApplicationTests {
-	
-	@Value("${local.server.port}")
-	private int port = 0;
 
-	@Test
-	public void catalogLoads() {
-		@SuppressWarnings("rawtypes")
-		ResponseEntity<Map> entity = new TestRestTemplate().getForEntity("http://localhost:" + port + "/eureka/apps", Map.class);
-		assertEquals(HttpStatus.OK, entity.getStatusCode());
-	}
+    @Value("${local.server.port}")
+    private int port = 0;
 
-	@Test
-	public void adminLoads() {
-		@SuppressWarnings("rawtypes")
-		ResponseEntity<Map> entity = new TestRestTemplate().getForEntity("http://localhost:" + port + "/env", Map.class);
-		assertEquals(HttpStatus.OK, entity.getStatusCode());
-	}
+    @Test
+    public void catalogLoads() {
+        @SuppressWarnings("rawtypes")
+        ResponseEntity<Map> entity = new TestRestTemplate().getForEntity("http://localhost:" + port + "/eureka/apps", Map.class);
+        assertEquals(HttpStatus.OK, entity.getStatusCode());
+    }
+
+    @Test
+    public void adminLoads() {
+        @SuppressWarnings("rawtypes")
+        ResponseEntity<Map> entity = new TestRestTemplate().getForEntity("http://localhost:" + port + "/env", Map.class);
+        assertEquals(HttpStatus.OK, entity.getStatusCode());
+    }
 
 }

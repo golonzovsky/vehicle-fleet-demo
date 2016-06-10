@@ -20,50 +20,47 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-
 import demo.model.CurrentPosition;
 import demo.service.KmlService;
 import demo.service.PositionService;
 
 /**
- *
  * @author Gunnar Hillert
- *
  */
 @Service
 public class DefaultPositionService implements PositionService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPositionService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPositionService.class);
 
-	@Autowired
-	private KmlService kmlService;
+    @Autowired
+    private KmlService kmlService;
 
-	@Autowired
-	@LoadBalanced
-	private RestTemplate restTemplate;
+    @Autowired
+    @LoadBalanced
+    private RestTemplate restTemplate;
 
-	public DefaultPositionService() {
-		super();
-	}
+    public DefaultPositionService() {
+        super();
+    }
 
-	@HystrixCommand(fallbackMethod = "processPositionInfoFallback")
-	@Override
-	public void processPositionInfo(long id, CurrentPosition currentPosition, boolean exportPositionsToKml,
-			boolean sendPositionsToIngestionService) {
+    @HystrixCommand(fallbackMethod = "processPositionInfoFallback")
+    @Override
+    public void processPositionInfo(long id, CurrentPosition currentPosition, boolean exportPositionsToKml,
+                                    boolean sendPositionsToIngestionService) {
 
-		if (exportPositionsToKml) {
-			this.kmlService.updatePosition(id, currentPosition);
-		}
+        if (exportPositionsToKml) {
+            this.kmlService.updatePosition(id, currentPosition);
+        }
 
-		if (sendPositionsToIngestionService) {
-			this.restTemplate.postForLocation("http://fleet-location-ingest/api/locations", currentPosition);
-		}
+        if (sendPositionsToIngestionService) {
+            this.restTemplate.postForLocation("http://fleet-location-ingest/api/locations", currentPosition);
+        }
 
-	}
+    }
 
-	public void processPositionInfoFallback(long id, CurrentPosition currentPosition, boolean exportPositionsToKml,
-			boolean sendPositionsToIngestionService) {
-		LOGGER.error("Hystrix Fallback Method. Unable to send message for ingestion.");
-	}
+    public void processPositionInfoFallback(long id, CurrentPosition currentPosition, boolean exportPositionsToKml,
+                                            boolean sendPositionsToIngestionService) {
+        LOGGER.error("Hystrix Fallback Method. Unable to send message for ingestion.");
+    }
 
 }

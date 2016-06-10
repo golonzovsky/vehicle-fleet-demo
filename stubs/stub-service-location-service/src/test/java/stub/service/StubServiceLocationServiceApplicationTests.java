@@ -30,77 +30,77 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 public class StubServiceLocationServiceApplicationTests {
 
-	@Autowired
-	WebApplicationContext context;
+    @Autowired
+    WebApplicationContext context;
 
-	@Value("${org.springframework.restdocs.outputDir:target/generated-snippets}")
-	private String restdocsOutputDir;
+    @Value("${org.springframework.restdocs.outputDir:target/generated-snippets}")
+    private String restdocsOutputDir;
 
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	@Before
-	public void init() {
-		System.setProperty("org.springframework.restdocs.outputDir",
-				this.restdocsOutputDir);
-		this.mockMvc = ForwardAwareMockMvcBuilders.webAppContextSetup(this.context)
-				.apply(documentationConfiguration()).build();
-	}
+    @Before
+    public void init() {
+        System.setProperty("org.springframework.restdocs.outputDir",
+                this.restdocsOutputDir);
+        this.mockMvc = ForwardAwareMockMvcBuilders.webAppContextSetup(this.context)
+                .apply(documentationConfiguration()).build();
+    }
 
-	@Test
-	public void getHome() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/"))
-		.andExpect(MockMvcResultMatchers.content()
-				.string(containsString("locations")))
-		.andDo(document("home"));
-	}
+    @Test
+    public void getHome() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(containsString("locations")))
+                .andDo(document("home"));
+    }
 
-	@Test
-	public void getLocations() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/serviceLocations"))
-		.andExpect(MockMvcResultMatchers.content()
-				.string(containsString("_embedded")))
-		.andDo(document("serviceLocations"));
-	}
+    @Test
+    public void getLocations() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/serviceLocations"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(containsString("_embedded")))
+                .andDo(document("serviceLocations"));
+    }
 
-	static class ForwardAwareMockMvcBuilders {
+    static class ForwardAwareMockMvcBuilders {
 
-		public static DefaultMockMvcBuilder webAppContextSetup(
-				WebApplicationContext context) {
-			DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(context);
-			ForwardAwareResultHandler forwarder = new ForwardAwareResultHandler();
-			builder.alwaysDo(forwarder);
-			forwarder.setMockMvc(builder.build());
-			return builder;
-		}
+        public static DefaultMockMvcBuilder webAppContextSetup(
+                WebApplicationContext context) {
+            DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(context);
+            ForwardAwareResultHandler forwarder = new ForwardAwareResultHandler();
+            builder.alwaysDo(forwarder);
+            forwarder.setMockMvc(builder.build());
+            return builder;
+        }
 
-		private static class ForwardAwareResultHandler implements ResultHandler {
+        private static class ForwardAwareResultHandler implements ResultHandler {
 
-			private MockMvc mockMvc;
+            private MockMvc mockMvc;
 
-			@Override
-			public void handle(MvcResult result) throws Exception {
-				MockHttpServletRequest request = result.getRequest();
-				String uri = request.getRequestURI();
-				MockHttpServletResponse response = result.getResponse();
-				String forward = response.getForwardedUrl();
-				if (StringUtils.hasText(forward)) {
-					request.setRequestURI(forward);
-					response.setForwardedUrl(null);
-					MvcResult forwarded = this.mockMvc.perform(servletContext -> request)
-							.andReturn();
-					// Hack response into result so it can be asserted as normal
-					ReflectionTestUtils.setField(result, "mockResponse",
-							forwarded.getResponse());
-					// Reset request to original uri
-					request.setRequestURI(uri);
-				}
-			}
+            @Override
+            public void handle(MvcResult result) throws Exception {
+                MockHttpServletRequest request = result.getRequest();
+                String uri = request.getRequestURI();
+                MockHttpServletResponse response = result.getResponse();
+                String forward = response.getForwardedUrl();
+                if (StringUtils.hasText(forward)) {
+                    request.setRequestURI(forward);
+                    response.setForwardedUrl(null);
+                    MvcResult forwarded = this.mockMvc.perform(servletContext -> request)
+                            .andReturn();
+                    // Hack response into result so it can be asserted as normal
+                    ReflectionTestUtils.setField(result, "mockResponse",
+                            forwarded.getResponse());
+                    // Reset request to original uri
+                    request.setRequestURI(uri);
+                }
+            }
 
-			public void setMockMvc(MockMvc mockMvc) {
-				this.mockMvc = mockMvc;
-			}
-		}
+            public void setMockMvc(MockMvc mockMvc) {
+                this.mockMvc = mockMvc;
+            }
+        }
 
-	}
+    }
 
 }

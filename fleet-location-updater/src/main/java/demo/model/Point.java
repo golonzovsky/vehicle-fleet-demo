@@ -26,12 +26,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Point {
-	private Double latitude;
-	private Double longitude;
+    private Double latitude;
+    private Double longitude;
 
-	@Override
-	public String toString() {
-		return "Point [lat/lang:" + latitude + "," + longitude + "]";
-	}
+    @Override
+    public String toString() {
+        return "Point [lat/lang:" + latitude + "," + longitude + "]";
+    }
 
 }

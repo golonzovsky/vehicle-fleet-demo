@@ -27,7 +27,6 @@ import org.springframework.context.annotation.Profile;
 
 /**
  * @author Dave Syer
- *
  */
 @ConditionalOnClass(Cloud.class)
 @Configuration
@@ -35,9 +34,9 @@ import org.springframework.context.annotation.Profile;
 @AutoConfigureBefore(CloudAutoConfiguration.class)
 public class CloudProfileAutoConfiguration {
 
-	@Bean
-	public Cloud cloud() {
-		return new CloudFactory().getCloud();
-	}
+    @Bean
+    public Cloud cloud() {
+        return new CloudFactory().getCloud();
+    }
 
 }

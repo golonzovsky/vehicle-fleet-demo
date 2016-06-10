@@ -20,16 +20,14 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
  * @author Gunnar Hillert
- *
  */
 @RestController
 public class WebSocketApi {
 
-	@MessageMapping("/sendMessage")
-	@SendTo("/queue/vehicles")
-	public String sendMessage(String message) throws Exception {
-		return message;
-	}
+    @MessageMapping("/sendMessage")
+    @SendTo("/queue/vehicles")
+    public String sendMessage(String message) throws Exception {
+        return message;
+    }
 }

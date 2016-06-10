@@ -15,15 +15,13 @@ package demo.service;
 import demo.model.CurrentPosition;
 
 /**
- *
  * @author Gunnar Hillert
- *
  */
 public interface PositionService {
 
-	void processPositionInfo(long id,
-			CurrentPosition currentPosition,
-			boolean exportPositionsToKml,
-			boolean sendPositionsToIngestionSerice);
+    void processPositionInfo(long id,
+                             CurrentPosition currentPosition,
+                             boolean exportPositionsToKml,
+                             boolean sendPositionsToIngestionSerice);
 
 }

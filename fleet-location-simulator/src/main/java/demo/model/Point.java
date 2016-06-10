@@ -18,18 +18,19 @@ import lombok.Data;
 
 /**
  * Denotes a point on the globe.
+ *
  * @author faram
  * @author Gunnar Hillert
  */
 @Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class Point {
-	private Double latitude;
-	private Double longitude;
+    private Double latitude;
+    private Double longitude;
 
-	@Override
-	public String toString() {
-		return "Point [lat/lang:" + latitude + "," + longitude + "]";
-	}
+    @Override
+    public String toString() {
+        return "Point [lat/lang:" + latitude + "," + longitude + "]";
+    }
 
 }

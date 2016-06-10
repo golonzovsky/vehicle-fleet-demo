@@ -41,101 +41,96 @@ import com.mongodb.MongoClientOptions;
  */
 public class MongoTestSupport implements TestRule {
 
-	public static final String EXTERNAL_SERVERS_REQUIRED = "EXTERNAL_SERVERS_REQUIRED";
+    public static final String EXTERNAL_SERVERS_REQUIRED = "EXTERNAL_SERVERS_REQUIRED";
 
-	protected MongoClient resource;
+    protected MongoClient resource;
 
-	private String resourceDescription;
+    private String resourceDescription;
 
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	protected MongoTestSupport(String resourceDescription) {
-		Assert.hasText(resourceDescription, "resourceDescription is required");
-		this.resourceDescription = resourceDescription;
-	}
+    protected MongoTestSupport(String resourceDescription) {
+        Assert.hasText(resourceDescription, "resourceDescription is required");
+        this.resourceDescription = resourceDescription;
+    }
 
-	@Override
-	public Statement apply(final Statement base, Description description) {
-		try {
-			obtainResource();
-		}
-		catch (Exception e) {
-			maybeCleanup();
+    @Override
+    public Statement apply(final Statement base, Description description) {
+        try {
+            obtainResource();
+        } catch (Exception e) {
+            maybeCleanup();
 
-			return failOrSkip(e);
-		}
+            return failOrSkip(e);
+        }
 
-		return new Statement() {
+        return new Statement() {
 
-			@Override
-			public void evaluate() throws Throwable {
-				try {
-					base.evaluate();
-				}
-				finally {
-					try {
-						cleanupResource();
-					}
-					catch (Exception ignored) {
-						MongoTestSupport.this.logger.warn("Exception while trying to cleanup proper resource", ignored);
-					}
-				}
-			}
+            @Override
+            public void evaluate() throws Throwable {
+                try {
+                    base.evaluate();
+                } finally {
+                    try {
+                        cleanupResource();
+                    } catch (Exception ignored) {
+                        MongoTestSupport.this.logger.warn("Exception while trying to cleanup proper resource", ignored);
+                    }
+                }
+            }
 
-		};
-	}
+        };
+    }
 
-	private Statement failOrSkip(final Exception e) {
-		String serversRequired = System.getenv(EXTERNAL_SERVERS_REQUIRED);
-		if ("true".equalsIgnoreCase(serversRequired)) {
-			this.logger.error(this.resourceDescription + " IS REQUIRED BUT NOT AVAILABLE", e);
-			fail(this.resourceDescription + " IS NOT AVAILABLE");
-			// Never reached, here to satisfy method signature
-			return null;
-		}
-		else {
-			this.logger.error(this.resourceDescription + " IS NOT AVAILABLE, SKIPPING TESTS", e);
-			return new Statement() {
+    private Statement failOrSkip(final Exception e) {
+        String serversRequired = System.getenv(EXTERNAL_SERVERS_REQUIRED);
+        if ("true".equalsIgnoreCase(serversRequired)) {
+            this.logger.error(this.resourceDescription + " IS REQUIRED BUT NOT AVAILABLE", e);
+            fail(this.resourceDescription + " IS NOT AVAILABLE");
+            // Never reached, here to satisfy method signature
+            return null;
+        } else {
+            this.logger.error(this.resourceDescription + " IS NOT AVAILABLE, SKIPPING TESTS", e);
+            return new Statement() {
 
-				@Override
-				public void evaluate() throws Throwable {
-					Assume.assumeTrue("Skipping test due to " + MongoTestSupport.this.resourceDescription + " not being available " + e, false);
-				}
-			};
-		}
-	}
+                @Override
+                public void evaluate() throws Throwable {
+                    Assume.assumeTrue("Skipping test due to " + MongoTestSupport.this.resourceDescription + " not being available " + e, false);
+                }
+            };
+        }
+    }
 
-	private void maybeCleanup() {
-		if (this.resource != null) {
-			try {
-				cleanupResource();
-			}
-			catch (Exception ignored) {
-				this.logger.warn("Exception while trying to cleanup failed resource", ignored);
-			}
-		}
-	}
+    private void maybeCleanup() {
+        if (this.resource != null) {
+            try {
+                cleanupResource();
+            } catch (Exception ignored) {
+                this.logger.warn("Exception while trying to cleanup failed resource", ignored);
+            }
+        }
+    }
 
-	public MongoClient getResource() {
-		return this.resource;
-	}
+    public MongoClient getResource() {
+        return this.resource;
+    }
 
-	/**
-	 * Perform cleanup of the {@link #resource} field, which is guaranteed to be non null.
-	 *
-	 * @throws Exception any exception thrown by this method will be logged and swallowed
-	 */
-	protected void cleanupResource() throws Exception {
-		this.resource.close();
-	}
+    /**
+     * Perform cleanup of the {@link #resource} field, which is guaranteed to be non null.
+     *
+     * @throws Exception any exception thrown by this method will be logged and swallowed
+     */
+    protected void cleanupResource() throws Exception {
+        this.resource.close();
+    }
 
-	/**
-	 * Try to obtain and validate a resource. Implementors should either set the {@link #resource} field with a valid
-	 * resource and return normally, or throw an exception.
-	 */
-	protected void obtainResource() throws Exception {
-		this.resource = new MongoClient("localhost", MongoClientOptions.builder().connectTimeout(300).build());
-		this.resource.getDatabaseNames();
-	}
+    /**
+     * Try to obtain and validate a resource. Implementors should either set the {@link #resource} field with a valid
+     * resource and return normally, or throw an exception.
+     */
+    protected void obtainResource() throws Exception {
+        this.resource = new MongoClient("localhost", MongoClientOptions.builder().connectTimeout(300).build());
+        this.resource.getDatabaseNames();
+    }
 
 }

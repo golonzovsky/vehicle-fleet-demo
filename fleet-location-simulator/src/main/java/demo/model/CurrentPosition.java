@@ -23,11 +23,11 @@ import lombok.Data;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class CurrentPosition {
 
-	private String vin;
-	private Point location;
-	private VehicleStatus vehicleStatus = VehicleStatus.NONE;
-	private Double speed;
-	private Double heading;
-	private FaultCode faultCode;
+    private String vin;
+    private Point location;
+    private VehicleStatus vehicleStatus = VehicleStatus.NONE;
+    private Double speed;
+    private Double heading;
+    private FaultCode faultCode;
 
 }

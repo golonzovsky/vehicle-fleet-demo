@@ -34,7 +34,6 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
  * Main entry point for the GpsSimulator application.
  *
  * @author Gunnar Hillert
- *
  */
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -42,25 +41,25 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
 @EnableScheduling
 public class GpsSimulatorApplication {
 
-	public static void main(String[] args) throws Exception {
-		SpringApplication.run(GpsSimulatorApplication.class, args);
-	}
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(GpsSimulatorApplication.class, args);
+    }
 
-	@Bean
-	@ExportMetricWriter
-	public InMemoryMetricRepository inMemoryMetricRepository() {
-		return new InMemoryMetricRepository();
-	}
+    @Bean
+    @ExportMetricWriter
+    public InMemoryMetricRepository inMemoryMetricRepository() {
+        return new InMemoryMetricRepository();
+    }
 
-	@Bean
-	public Jaxb2Marshaller getMarshaller() {
-		final Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-		jaxb2Marshaller.setClassesToBeBound(Kml.class);
+    @Bean
+    public Jaxb2Marshaller getMarshaller() {
+        final Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
+        jaxb2Marshaller.setClassesToBeBound(Kml.class);
 
-		final Map<String,Object> map = new HashMap<>();
-		map.put("jaxb.formatted.output", true);
+        final Map<String, Object> map = new HashMap<>();
+        map.put("jaxb.formatted.output", true);
 
-		jaxb2Marshaller.setMarshallerProperties(map);
-		return jaxb2Marshaller;
-	}
+        jaxb2Marshaller.setMarshallerProperties(map);
+        return jaxb2Marshaller;
+    }
 }

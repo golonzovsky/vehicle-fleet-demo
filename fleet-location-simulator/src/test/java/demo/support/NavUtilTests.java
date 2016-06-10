@@ -30,35 +30,33 @@ import demo.GpsSimulatorApplication;
 import demo.model.DirectionInput;
 import demo.model.Point;
 import demo.service.PathService;
-import demo.support.NavUtils;
 
 /**
  * @author Gunnar Hillert
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @Configuration
 @SpringApplicationConfiguration(classes = {GpsSimulatorApplication.class})
 public class NavUtilTests {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(NavUtilTests.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NavUtilTests.class);
 
-	@Autowired
-	private PathService pathService;
+    @Autowired
+    private PathService pathService;
 
-	@Test
-	@IfProfileValue(name="use-google-directions", value="true")
-	public void testTotalDistance() throws NumberFormatException, JAXBException {
+    @Test
+    @IfProfileValue(name = "use-google-directions", value = "true")
+    public void testTotalDistance() throws NumberFormatException, JAXBException {
 
-		DirectionInput directionInput = new DirectionInput();
-		directionInput.setFrom("73-2020 Kaloko Dr, Kailua-Kona, HI 96740");
-		directionInput.setTo("73-1249 Kaloko Dr, Kailua-Kona, HI 96740");
+        DirectionInput directionInput = new DirectionInput();
+        directionInput.setFrom("73-2020 Kaloko Dr, Kailua-Kona, HI 96740");
+        directionInput.setTo("73-1249 Kaloko Dr, Kailua-Kona, HI 96740");
 
-		List<Point> points = pathService.getCoordinatesFromGoogle(directionInput);
+        List<Point> points = pathService.getCoordinatesFromGoogle(directionInput);
 
-		double totalDistance = NavUtils.getTotalDistance(points);
+        double totalDistance = NavUtils.getTotalDistance(points);
 
-		LOGGER.info("totalDistance: " + totalDistance);
-	}
+        LOGGER.info("totalDistance: " + totalDistance);
+    }
 
 }

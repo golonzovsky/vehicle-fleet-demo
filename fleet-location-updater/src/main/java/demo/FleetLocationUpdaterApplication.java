@@ -24,15 +24,14 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * Main entry point for the Fleet Location Updater application.
  *
  * @author Gunnar Hillert
- *
  */
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableCircuitBreaker
 public class FleetLocationUpdaterApplication {
 
-	public static void main(String[] args) throws Exception {
-		SpringApplication.run(FleetLocationUpdaterApplication.class, args);
-	}
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(FleetLocationUpdaterApplication.class, args);
+    }
 
 }

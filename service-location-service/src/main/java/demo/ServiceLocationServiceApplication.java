@@ -23,8 +23,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 public class ServiceLocationServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ServiceLocationServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceLocationServiceApplication.class, args);
+    }
 
 }
