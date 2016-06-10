@@ -45,22 +45,18 @@ import lombok.Setter;
 @ConfigurationProperties("fleet.zipkin")
 public class DefaultSamplerAutoConfiguration {
 
-    SecureRandom random = new SecureRandom();
+    private SecureRandom random = new SecureRandom();
 
-    @Getter
-    @Setter
+    @Getter @Setter
     double sampleRate = 0.1;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     private boolean enabled;
 
     @Bean
     @ConditionalOnMissingBean(Sampler.class)
     public Sampler<?> defaultSampler() {
-        return (Object context) -> {
-            return this.random.nextFloat() < this.sampleRate;
-        };
+        return (Object context) -> this.random.nextFloat() < this.sampleRate;
     }
 
     @Configuration
